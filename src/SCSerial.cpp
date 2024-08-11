@@ -5,22 +5,57 @@
 
 #include "SCSerial.h"
 
+pSerial_::pSerial_()
+{
+	pSerial_h = NULL;
+	pSerial_s = NULL;
+}
+
+int pSerial_::read()
+{
+		//DEBUG#Serial.println("reading!");
+	if(pSerial_h != NULL){
+		//DEBUG#Serial.println("rh");
+		return pSerial_h->read();
+	}else if(pSerial_s != NULL){
+		//DEBUG#Serial.println("rs");
+		return pSerial_s->read();
+	}
+	//DEBUG#Serial.print("error");
+}
+
+size_t pSerial_::write(uint8_t *data, uint8_t *len)
+{
+		//DEBUG#Serial.println("writing!");
+	if(pSerial_h != NULL){
+		//DEBUG#Serial.println("wh");
+		return pSerial_h->write(data, len);
+	}else if(pSerial_s != NULL){
+		//DEBUG#Serial.println("ws");
+		return pSerial_s->write(data, len);
+	}
+	//DEBUG#Serial.print("error");
+}
+
 SCSerial::SCSerial()
 {
 	IOTimeOut = 100;
-	pSerial = NULL;
+	pSerial_hack = pSerial_();
+	pSerial = &pSerial_hack;
 }
 
 SCSerial::SCSerial(u8 End):SCS(End)
 {
 	IOTimeOut = 100;
-	pSerial = NULL;
+	pSerial_hack = pSerial_();
+	pSerial = &pSerial_hack;
 }
 
 SCSerial::SCSerial(u8 End, u8 Level):SCS(End, Level)
 {
 	IOTimeOut = 100;
-	pSerial = NULL;
+	pSerial_hack = pSerial_();
+	pSerial = &pSerial_hack;
 }
 
 int SCSerial::readSCS(unsigned char *nDat, int nLen)
